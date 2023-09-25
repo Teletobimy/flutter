@@ -15,7 +15,7 @@ import 'vmservice.dart';
 const String kFlutterTestOutputsDirEnvName = 'FLUTTER_TEST_OUTPUTS_DIR';
 class ColdRunner extends ResidentRunner {
   ColdRunner(
-    super.devices, {
+    super.flutterDevices, {
     required super.target,
     required super.debuggingOptions,
     this.traceStartup = false,
@@ -69,7 +69,7 @@ class ColdRunner extends ResidentRunner {
       return 1;
     }
 
-    // Connect to observatory.
+    // Connect to the VM Service.
     if (debuggingEnabled) {
       try {
         await connectToServiceProtocol(allowExistingDdsInstance: false);
@@ -86,6 +86,7 @@ class ColdRunner extends ResidentRunner {
         unawaited(residentDevtoolsHandler!.serveAndAnnounceDevTools(
           devToolsServerAddress: debuggingOptions.devToolsServerAddress,
           flutterDevices: flutterDevices,
+          isStartPaused: debuggingOptions.startPaused,
         ));
       }
       if (debuggingOptions.serveObservatory) {
@@ -93,7 +94,7 @@ class ColdRunner extends ResidentRunner {
       }
     }
 
-    if (flutterDevices.first.observatoryUris != null) {
+    if (flutterDevices.first.vmServiceUris != null) {
       // For now, only support one debugger connection.
       connectionInfoCompleter?.complete(DebugConnectionInfo(
         httpUri: flutterDevices.first.vmService!.httpAddress,
@@ -173,6 +174,7 @@ class ColdRunner extends ResidentRunner {
         unawaited(residentDevtoolsHandler!.serveAndAnnounceDevTools(
           devToolsServerAddress: debuggingOptions.devToolsServerAddress,
           flutterDevices: flutterDevices,
+          isStartPaused: debuggingOptions.startPaused,
         ));
       }
       if (debuggingOptions.serveObservatory) {

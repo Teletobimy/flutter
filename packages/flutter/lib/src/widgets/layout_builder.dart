@@ -34,9 +34,6 @@ typedef LayoutWidgetBuilder = Widget Function(BuildContext context, BoxConstrain
 /// [RenderConstrainedLayoutBuilder].
 abstract class ConstrainedLayoutBuilder<ConstraintType extends Constraints> extends RenderObjectWidget {
   /// Creates a widget that defers its building until layout.
-  ///
-  /// The [builder] argument must not be null, and the returned widget should not
-  /// be null.
   const ConstrainedLayoutBuilder({
     super.key,
     required this.builder,
@@ -48,7 +45,7 @@ abstract class ConstrainedLayoutBuilder<ConstraintType extends Constraints> exte
   /// Called at layout time to construct the widget tree.
   ///
   /// The builder must not return null.
-  final Widget Function(BuildContext, ConstraintType) builder;
+  final Widget Function(BuildContext context, ConstraintType constraints) builder;
 
   // updateRenderObject is redundant with the logic in the LayoutBuilderElement below.
 }
@@ -262,8 +259,6 @@ mixin RenderConstrainedLayoutBuilder<ConstraintType extends Constraints, ChildTy
 ///  * The [catalog of layout widgets](https://flutter.dev/widgets/layout/).
 class LayoutBuilder extends ConstrainedLayoutBuilder<BoxConstraints> {
   /// Creates a widget that defers its building until layout.
-  ///
-  /// The [builder] argument must not be null.
   const LayoutBuilder({
     super.key,
     required super.builder,
